@@ -359,7 +359,6 @@ class ChangelogConfig:
     prelude_title: str
     new_plugins_after_name: str
     changes_file: str
-    changes_format: str
     keep_fragments: bool
     prevent_known_fragments: bool
     use_fqcn: bool
@@ -404,10 +403,7 @@ class ChangelogConfig:
             "new_plugins_after_name", ""
         )  # not used
         self.changes_file = self.config.get("changes_file", ".changes.yaml")
-        self.changes_format = self.config.get("changes_format", "classic")
-        self.keep_fragments = self.config.get(
-            "keep_fragments", self.changes_format == "classic"
-        )
+        self.keep_fragments = self.config.get("keep_fragments", False)
         self.prevent_known_fragments = self.config.get(
             "prevent_known_fragments", self.keep_fragments
         )
@@ -426,9 +422,7 @@ class ChangelogConfig:
             "trivial" if has_trivial_section_by_default else None,
         )
         self.sanitize_changelog = self.config.get("sanitize_changelog", False)
-        always_refresh = self.config.get(
-            "always_refresh", self.changes_format == "classic"
-        )
+        always_refresh = self.config.get("always_refresh", False)
         if always_refresh is True:
             always_refresh = "full"
         if always_refresh is False:
@@ -486,20 +480,6 @@ class ChangelogConfig:
             )
         if self.is_other_project and self.is_collection and not ignore_is_other_project:
             raise ChangelogError("is_other_project must not be True for collections")
-        if self.changes_format not in ("classic", "combined"):
-            raise ChangelogError(
-                'changes_format must be one of "classic" and "combined"'
-            )
-        if self.changes_format == "classic" and not self.keep_fragments:
-            raise ChangelogError(
-                'changes_format == "classic" cannot be '
-                "combined with keep_fragments == False"
-            )
-        if self.changes_format == "classic" and not self.prevent_known_fragments:
-            raise ChangelogError(
-                'changes_format == "classic" cannot be '
-                "combined with prevent_known_fragments == False"
-            )
 
     def store(self) -> None:  # noqa: C901
         """
@@ -508,7 +488,6 @@ class ChangelogConfig:
         config: dict = {
             "notesdir": self.notes_dir,
             "changes_file": self.changes_file,
-            "changes_format": self.changes_format,
             "mention_ancestor": self.mention_ancestor,
             "keep_fragments": self.keep_fragments,
             "use_fqcn": self.use_fqcn,
@@ -535,7 +514,7 @@ class ChangelogConfig:
                 )
         if self.title is not None:
             config["title"] = self.title
-        should_always_refresh = self.changes_format == "classic"
+        should_always_refresh = False
         if self.always_refresh != ("full" if should_always_refresh else "none"):
             config["always_refresh"] = self.always_refresh
         if self.keep_fragments != self.prevent_known_fragments:
@@ -592,7 +571,6 @@ class ChangelogConfig:
         """
         config = {
             "changes_file": "changelog.yaml",
-            "changes_format": "combined",
             "changelog_filename_template": "../CHANGELOG.rst",
             "changelog_filename_version_depth": 0,
             "new_plugins_after_name": "removed_features",
