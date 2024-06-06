@@ -27,7 +27,6 @@ title: Ansible Base
 release_tag_re: '(v(?:[\d.ab\-]|rc)+)'
 pre_release_tag_re: '(?P<pre_release>(?:[ab]|rc)+\d*)$'
 changes_file: changelog.yaml
-changes_format: combined
 keep_fragments: true
 always_refresh: true
 mention_ancestor: false
@@ -165,7 +164,6 @@ title: Ansible Base
 release_tag_re: '(v(?:[\d.ab\-]|rc)+)'
 pre_release_tag_re: '(?P<pre_release>(?:[ab]|rc)+\d*)$'
 changes_file: changelog.yaml
-changes_format: combined
 keep_fragments: true
 always_refresh: true
 mention_ancestor: false
@@ -895,7 +893,6 @@ title: Ansible Base
 release_tag_re: '(v(?:[\d.ab\-]|rc)+)'
 pre_release_tag_re: '(?P<pre_release>(?:[ab]|rc)+\d*)$'
 changes_file: changelog.yaml
-changes_format: combined
 keep_fragments: true
 always_refresh: true
 mention_ancestor: false

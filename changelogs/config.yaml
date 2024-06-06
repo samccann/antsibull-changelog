@@ -6,7 +6,6 @@
 changelog_filename_template: ../CHANGELOG
 changelog_filename_version_depth: 0
 changes_file: changelog.yaml
-changes_format: combined
 is_other_project: true
 keep_fragments: false
 mention_ancestor: true
